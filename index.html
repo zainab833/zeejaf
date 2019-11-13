@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<script src="./angular.min.js"></script>
+<link rel="stylesheet" href="./bootstrap.min.css">
+<body ng-app="myApp"ng-controller="myCtrl">
+<style>
+    body{
+        background-color: rgb(128, 128, 128);
+    }
+
+    h1{
+        color: rgb(0, 70, 128);
+        margin-left: 40px;
+    }
+    
+    
+    
+    
+    </style>
+
+<div class="container">
+  <p>Name : <input type="text" ng-model="name"></p>
+  <h1>Hello {{name}} FATIMA SAID</h1>
+  Angular Test App NG-APP
+  <div>
+      <hr>
+      <div>
+          <p>First Number: <input type="text" ng-model="first_number"></p>
+          <p>Second Number: <input type="text" ng-model="second_number"></p>
+          <p>My first expression: {{ (first_number - 0)+ (second_number - 0) }}</p>
+      </div>
+  </div>
+  <div>
+      <hr>
+      <div>
+          <p>Enter First Name: <input type="text" ng-model="fname"></p>
+          <p>Enter Last Name: <input type="text" ng-model="lname"></p>
+          <p>Full Name: {{ fullName }}</p>
+          <button ng-click="addNames()" class="btn btn-primary">Add Names</button>
+      </div>
+  </div>
+</div>
+    <hr>
+
+    <form novalidate class="container">
+        <p>{{ message }}</p><br>
+
+        Full Name:<br>
+        <input type="text" ng-model="user.name" required class="shadow"><br>
+        Email:<br>
+        <input type="text" ng-model="user.email" required class="shadow"><br>
+        Phone:<br>
+        <input type="text" ng-model="user.phone" required class="shadow"><br>
+        Stream:<br>
+        <input type="text" ng-model="user.stream" requiredclass="shadow" ><br>
+        Gender:<br>
+        <input type="text" ng-model="user.gender" required class="shadow"><br>
+        About You:<br>
+        <input type="text" ng-model="user.about" required class="shadow"><br>
+        Your Experience:<br>
+        <input type="text" ng-model="user.experience" required class="shadow"><br>
+        <br><br>
+        <input type="text" ng-model="user.user_id">
+        <button ng-click="save()" class="btn btn-success" >Submit</button>
+        <button ng-click="update()"class="btn btn-warning">Update</button>
+        <button ng-click="reset()" class="btn btn-danger" >RESET</button>
+    </form>
+
+    <hr>
+
+    <table style="width:100%">
+        <button ng-click="getstudents()" class="btn btn-primary">Refresh</button>
+        <tr>
+            <th>Full Name</th>
+            <th>Stream</th>
+            <th>Gender</th>
+            <th>About</th>
+            <th>Experience</th>
+            <th>Action</th>
+        </tr>
+        <tr ng-repeat="data in res.data">
+            <td>{{ data.name }}</td>
+            <td>{{ data.stream }}</td>
+            <td>{{ data.gender }}</td>
+            <td>{{ data.about }}</td>
+            <td>{{ data.experience }}</td>
+            <td>
+                <button ng-click="edit(data.id)">Edit</button>
+                <button ng-click="delete(data.id)">Delete</button>
+            </td>
+
+        </tr>
+
+
+
+
+
+
+
+    </table>
+
+</body>
+
+<script>
+    var app = angular.module("myApp",[]);
+
+        app.controller("myCtrl", function($scope, $http) {
+            //model data for rough work starts here
+
+            $scope.lname = '';
+            $scope.fname = '';
+
+            $scope.addNames = function() {
+                return $scope.fullName = $scope.fname + " " + $scope.lname;
+            };
+        });
+
+</script>
+</html>

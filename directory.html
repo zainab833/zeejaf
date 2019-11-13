@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<script src="./angular.min.js"></script>
+<link rel="stylesheet" href="./bootstrap.min.css">
+<body ng-app="myApp"ng-controller="myCtrl">
+    <div><h1>STUDENT DIRECTORY</h1></div>
+    <form novalidate class="container">
+
+        <p>{{  message }}</p><br>
+
+        Full Name:<br>
+        <input type="text" ng-model="user.name" required class="shadow"><br>
+        Email:<br>
+        <input type="text" ng-model="user.email" required class="shadow"><br>
+        Phone:<br>
+        <input type="text" ng-model="user.phone" required class="shadow"><br>
+        Stream:<br>
+        <input type="text" ng-model="user.stream" requiredclass="shadow" ><br>
+        Gender:<br>
+        <input type="text" ng-model="user.gender" required class="shadow"><br>
+        About You:<br>
+        <input type="text" ng-model="user.about" required class="shadow"><br>
+        Your Experience:<br>
+        <input type="text" ng-model="user.experience" required class="shadow"><br>
+        <br><br>
+        <input type="text" ng-model="user.user_id">
+        <button ng-click="save()" class="btn btn-success" >Submit</button>
+        <button ng-click="update()"class="btn btn-warning">Update</button>
+        <button ng-click="reset()" class="btn btn-danger" >RESET</button>
+    </form>
+
+    <hr>
+
+    <table style="width:100%">
+        <button ng-click="getstudents()" class="btn btn-primary">Refresh</button>
+        <tr>
+            <th>Full Name</th>
+            <th>Stream</th>
+            <th>Gender</th>
+            <th>About</th>
+            <th>Experience</th>
+            <th>Action</th>
+        </tr>
+        <tr ng-repeat="data in res.data">
+            <td>{{ data.name }}</td>
+            <td>{{ data.stream }}</td>
+            <td>{{ data.gender }}</td>
+            <td>{{ data.about }}</td>
+            <td>{{ data.experience }}</td>
+            <td>
+                <button ng-click="edit(data.id)">Edit</button>
+                <button ng-click="delete(data.id)">Delete</button>
+            </td>
+
+        </tr>
+
+
+
+
+
+
+
+    </table>
+
+</body>
+
+<script>
+    var app = angular.module("myApp",[]);
+
+        app.controller("myCtrl", function($scope, $http) {
+            //model data for rough work starts here
+            $scope.master = {
+                name: "",
+                email: "",
+                phone: "",
+                stream: "",
+                gender: "",
+                about: "",
+                year: "",
+                experience: "",
+                user_id: ""
+            };
+
+            // reset and generate the user scope data from the master data
+            $scope.reset = function() {
+                $scope.user = angular.copy($scope.master);
+            };
+            
+            // call reset function to make sure form is reset and empty when window loads
+            $scope.reset();
+
+            // message data to hold and display sucess or failure of our api request
+            $scope.message = "";
+
+            //save function
+                $scope.save = function(){
+                $http.post("https://click-on-kaduna.herokuapp.com/api/student", $scope.user)
+                .then(function(respone) {
+                    $scope.message = respone.data.message;
+                    $scope.getStudents();
+                    $scope.reset();
+                });     
+                };
+
+            //getStudents function
+                    $scope.getStudents = function(){
+                    $http.get("https://click-on-kaduna.herokuapp.com/api/student")
+                    .then(function(response) {
+                        $scope.res = response.data;
+                    });    
+                    };
+            // call the getstudents function to make sure all registered students are updated
+            $scope.getStudents();
+
+            //delete function
+            $scope.delete = function($id){
+            $http.delete("https://click-on-kaduna.herokuapp.com/api/student/"+ $id)
+            .then(function(response) {
+                $scope.message = response.data.message;
+                $scope.getStudents();
+                $scope.reset();
+            });    
+            };
+
+            //edit function
+            $scope.edit = function($id) {
+                $http.get("https://click-on-kaduna.heroruapp.com/api/student/"+ $id)
+                .then(function(response) {
+                    $res = response.data
+                    $data = $res.data
+
+                    $scope.user.name = $data.name
+                    $scope.user.email = $data.email
+                    $scope.user.phone = $data.phone
+                    $scope.user.stream = $data.stream
+                    $scope.user.gender = $data.gender
+                    $scope.user.about = $data.about
+                    $scope.user.experience = $data.experience
+                    $scope.user.user_id= $data.id
+
+                    $scope.getStudents();
+                    $scope.reset();
+                });
+            };
+
+            //update function
+                $scope.update = function(){
+                    $http.patch("https://click-on-kaduna.herokuapp.com/api/student/"+ $scope.user)
+                    .then(function(response) {
+                        $scope.message = response.data.message;
+                        $scope.getStudents();
+                        $scope.reset();
+                    });
+                };
+                    
+           
+        });
+</script>
+</html>
